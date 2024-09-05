@@ -9,14 +9,14 @@ namespace PromoCodeFactory.DataAccess.Repositories
 {
     public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
-        protected IEnumerable<T> Data { get; set; }
+        protected List<T> Data { get; set; }
 
         public InMemoryRepository(IEnumerable<T> data)
         {
-            Data = data;
+            Data = data.ToList();
         }
 
-        public Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
+        public Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Data);
         }
@@ -29,22 +29,22 @@ namespace PromoCodeFactory.DataAccess.Repositories
         public Task<T> CreateAsync(T obj, CancellationToken cancellationToken = default)
         {
             obj.Id = Guid.NewGuid();
-            Data = Data.Append(obj);
-            return Task.FromResult(Data.FirstOrDefault(x => x.Id == obj.Id));
+            Data.Add(obj);
+            return Task.FromResult(obj);
         }
 
         public Task<T> UpdateAsync(T obj, CancellationToken cancellationToken = default)
         {
-            Data = Data.Where(x => x.Id != obj.Id);
-            Data = Data.Append(obj);
-            return Task.FromResult(Data.FirstOrDefault(x => x.Id == obj.Id));
+            Data.RemoveAll(x => x.Id == obj.Id);
+            Data.Add(obj);
+            return Task.FromResult(obj);
         }
 
         public Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var count = Data.Count();
-            Data = Data.Where(x => x.Id != id);
-            return Task.FromResult(Data.Count() < count);
+            var count = Data.Count;
+            Data.RemoveAll(x => x.Id == id);
+            return Task.FromResult(Data.Count < count);
         }
     }
 }
