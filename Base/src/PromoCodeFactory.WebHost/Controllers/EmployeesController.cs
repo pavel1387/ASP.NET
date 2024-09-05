@@ -90,7 +90,20 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             var result = await _employeeRepository.CreateAsync(newEntity, cancellationToken);
 
-            return await GetEmployeeByIdAsync(result.Id);
+            var employeeResponse = new EmployeeResponse()
+            {
+                Id = result.Id,
+                Email = result.Email,
+                Roles = result.Roles.Select(x => new RoleItemResponse()
+                {
+                    Name = x.Name,
+                    Description = x.Description
+                }).ToList(),
+                FullName = result.FullName,
+                AppliedPromocodesCount = result.AppliedPromocodesCount
+            };
+
+            return employeeResponse;
         }
 
 
@@ -104,7 +117,7 @@ namespace PromoCodeFactory.WebHost.Controllers
             var entity = await _employeeRepository.GetByIdAsync(employeeUpdateDTO.Id, cancellationToken);
 
             if (entity == null)
-                return BadRequest();
+                return NotFound();
 
             entity.Email = employeeUpdateDTO.Email;
             entity.FirstName = employeeUpdateDTO.FirstName;
@@ -113,7 +126,20 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             var result = await _employeeRepository.UpdateAsync(entity, cancellationToken);
 
-            return await GetEmployeeByIdAsync(result.Id);
+            var employeeResponse = new EmployeeResponse()
+            {
+                Id = result.Id,
+                Email = result.Email,
+                Roles = result.Roles.Select(x => new RoleItemResponse()
+                {
+                    Name = x.Name,
+                    Description = x.Description
+                }).ToList(),
+                FullName = result.FullName,
+                AppliedPromocodesCount = result.AppliedPromocodesCount
+            };
+
+            return employeeResponse;
         }
 
 
@@ -127,7 +153,7 @@ namespace PromoCodeFactory.WebHost.Controllers
             var entity = await _employeeRepository.GetByIdAsync(id, cancellationToken);
 
             if (entity == null)
-                return BadRequest();
+                return NotFound();
 
             var deleted = await _employeeRepository.DeleteAsync(id, cancellationToken);
             if (deleted)
