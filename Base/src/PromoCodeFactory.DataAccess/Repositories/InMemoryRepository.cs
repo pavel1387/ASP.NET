@@ -21,7 +21,7 @@ namespace PromoCodeFactory.DataAccess.Repositories
             return Task.FromResult(Data);
         }
 
-        public Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Data.FirstOrDefault(x => x.Id == id));
         }

@@ -10,7 +10,7 @@ namespace PromoCodeFactory.Core.Abstractions.Repositories
     {
         Task<List<T>> GetAllAsync(CancellationToken cancellationToken);
 
-        Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         Task<T> CreateAsync(T obj, CancellationToken cancellationToken);
 
