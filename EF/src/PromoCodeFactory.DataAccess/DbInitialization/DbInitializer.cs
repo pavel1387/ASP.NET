@@ -19,8 +19,9 @@ namespace PromoCodeFactory.DataAccess.DbInitialization
 
         public void Initialize()
         {
-            _dbContext.Database.EnsureDeleted();
-            _dbContext.Database.EnsureCreated();
+            //_dbContext.Database.EnsureDeleted();
+            //_dbContext.Database.EnsureCreated();
+            _dbContext.Database.Migrate();
 
             _dbContext.AddRange(FakeDataFactory.Employees);
             _dbContext.AddRange(FakeDataFactory.Preferences);

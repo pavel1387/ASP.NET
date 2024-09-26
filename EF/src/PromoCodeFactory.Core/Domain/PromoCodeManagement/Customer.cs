@@ -11,6 +11,7 @@ namespace PromoCodeFactory.Core.Domain.PromoCodeManagement
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
         public string Email { get; set; }
+        public int Age { get; set; }
         public virtual List<CustomerPreference> CustomerPreferences { get; set; }
         public virtual List<PromoCode> PromoCodes { get; set; }
     }
