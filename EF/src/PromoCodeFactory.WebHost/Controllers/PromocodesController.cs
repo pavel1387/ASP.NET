@@ -64,7 +64,6 @@ namespace PromoCodeFactory.WebHost.Controllers
         [HttpPost]
         public async Task<IActionResult> GivePromoCodesToCustomersWithPreferenceAsync(GivePromoCodeRequest request, CancellationToken cancellationToken)
         {
-            //TODO: Создать промокод и выдать его клиентам с указанным предпочтением
             var preferences = await _preferenceRepository.GetAllAsync(cancellationToken);
 
             var preference = preferences.FirstOrDefault(x => x.Name == request.Preference);

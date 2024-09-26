@@ -39,7 +39,6 @@ namespace PromoCodeFactory.WebHost
 
             services.AddScoped<IRepository<Preference>, PreferenceRepositoriy>();
             services.AddScoped<IRepository<Role>, RoleRepositoriy>();
-
             services.AddScoped<IRepository<Customer>, CustomerRepository>();
             services.AddScoped<IRepository<Employee>, EmployeeRepositoriy>();
             services.AddScoped<IRepository<PromoCode>, PromocodeRepositoriy>();

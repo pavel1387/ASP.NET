@@ -36,7 +36,7 @@ namespace PromoCodeFactory.WebHost.Controllers
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Email = x.Email,
-                Id = x.Id
+                Id = x.Id,
             });
 
             return Ok(shortCustomers);

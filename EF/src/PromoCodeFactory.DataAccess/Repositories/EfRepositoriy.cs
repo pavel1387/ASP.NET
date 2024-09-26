@@ -13,10 +13,10 @@ namespace PromoCodeFactory.DataAccess.Repositories
 {
     public class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
-        protected readonly DbContext _dbContext;
+        protected readonly DataContext _dbContext;
         protected readonly DbSet<T> _entitySet;
 
-        public EfRepository(DbContext dbContext)
+        public EfRepository(DataContext dbContext)
         {
             _dbContext = dbContext;
             _entitySet = _dbContext.Set<T>();
