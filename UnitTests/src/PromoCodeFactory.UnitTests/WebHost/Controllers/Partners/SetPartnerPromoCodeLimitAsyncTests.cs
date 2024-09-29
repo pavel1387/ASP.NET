@@ -87,7 +87,7 @@ namespace PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_WhenSettingNewLimit_NumberIssuedPromoCodesIsReset()
+        public async Task SetPartnerPromoCodeLimitAsync_WhenSettingNewLimit_NumberIssuedPromoCodesIsReset()
         {
             // Arrange
             var fixture = new Fixture();
@@ -119,7 +119,7 @@ namespace PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
 
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_WhenPreviousLimitIsExpired_NumberIssuedPromoCodesIsNotReset()
+        public async Task SetPartnerPromoCodeLimitAsync_WhenPreviousLimitIsExpired_NumberIssuedPromoCodesIsNotReset()
         {
             // Arrange
             var fixture = new Fixture();
@@ -150,7 +150,7 @@ namespace PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_WhenSettingNewLimit_PreviousLimitIsCancelled()
+        public async Task SetPartnerPromoCodeLimitAsync_WhenSettingNewLimit_PreviousLimitIsCancelled()
         {
             // Arrange
             var fixture = new Fixture();
@@ -180,7 +180,7 @@ namespace PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_LimitBelowZero_ReturnsBadRequest()
+        public async Task SetPartnerPromoCodeLimitAsync_LimitBelowZero_ReturnsBadRequest()
         {
             // Arrange
             var fixture = new Fixture();
@@ -204,7 +204,7 @@ namespace PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_WhenSettingNewLimit_NewLimitIsSavedInDatabase()
+        public async Task SetPartnerPromoCodeLimitAsync_WhenSettingNewLimit_NewLimitIsSavedInDatabase()
         {
             // Arrange
             var fixture = new Fixture();
