@@ -3,7 +3,7 @@ name: PromoCodeFactory Unit Tests
 on:
   push:
     branches:
-      - ci
+      - homework-unit-tests
 
 jobs:
   build:
