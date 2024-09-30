@@ -2,6 +2,7 @@
 using PromoCodeFactory.Core.Abstractions.Repositories;
 using PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using PromoCodeFactory.WebHost.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -39,5 +40,23 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             return Ok(preferencesResponse);
         }
+
+        /// <summary>
+        /// Добавить предпочтение
+        /// </summary>
+        [HttpPost]
+        public async Task<ActionResult<PreferenceResponse>> AddPreferenceAsync(CreatePreferenceRequest request, CancellationToken cancellationToken = default)
+        {
+            var preference = new Preference()
+            {
+                Name = request.Name,
+            };
+
+            var newPreference = await _preferencesRepository.CreateAsync(preference, cancellationToken);
+
+            return Ok(new PreferenceResponse { Id = newPreference.Id, Name = newPreference.Name});
+        }
+
+
     }
 }

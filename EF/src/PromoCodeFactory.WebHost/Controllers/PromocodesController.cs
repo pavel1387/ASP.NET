@@ -8,6 +8,7 @@ using PromoCodeFactory.Core.Abstractions.Repositories;
 using PromoCodeFactory.Core.Domain.Administration;
 using PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using PromoCodeFactory.DataAccess.Repositories;
+using PromoCodeFactory.DataAccess.Repositories.Abstractions;
 using PromoCodeFactory.WebHost.Models;
 
 namespace PromoCodeFactory.WebHost.Controllers
@@ -23,12 +24,12 @@ namespace PromoCodeFactory.WebHost.Controllers
         private readonly IRepository<PromoCode> _promocodeRepository;
         private readonly IRepository<Customer> _customerRepository;
         private readonly IRepository<Employee> _employeeRepository;
-        private readonly IRepository<Preference> _preferenceRepository;
+        private readonly IPreferenceRepositoriy _preferenceRepository;
 
         public PromocodesController(IRepository<PromoCode> promocodeRepository, 
             IRepository<Customer> customerRepository, 
-            IRepository<Employee> employeeRepository, 
-            IRepository<Preference> preferenceRepository)
+            IRepository<Employee> employeeRepository,
+            IPreferenceRepositoriy preferenceRepository)
         {
             _promocodeRepository = promocodeRepository;
             _customerRepository = customerRepository;
@@ -64,11 +65,10 @@ namespace PromoCodeFactory.WebHost.Controllers
         [HttpPost]
         public async Task<IActionResult> GivePromoCodesToCustomersWithPreferenceAsync(GivePromoCodeRequest request, CancellationToken cancellationToken)
         {
-            var preferences = await _preferenceRepository.GetAllAsync(cancellationToken);
+            var preference = await _preferenceRepository.GetByName(request.Preference);
 
-            var preference = preferences.FirstOrDefault(x => x.Name == request.Preference);
-            if (preference == null)
-                return BadRequest(request);
+            if (preference==null)
+                return BadRequest(request.Preference);
 
             var partnerManagers = await _employeeRepository.GetAllAsync(cancellationToken);
 
@@ -86,7 +86,6 @@ namespace PromoCodeFactory.WebHost.Controllers
             {
                 PromoCode promoCode = new PromoCode
                 {
-                    Id = Guid.NewGuid(),
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(7),
                     Code = request.PromoCode,

@@ -11,6 +11,7 @@ using PromoCodeFactory.DataAccess;
 using PromoCodeFactory.DataAccess.Data;
 using PromoCodeFactory.DataAccess.DbInitialization;
 using PromoCodeFactory.DataAccess.Repositories;
+using PromoCodeFactory.DataAccess.Repositories.Abstractions;
 
 namespace PromoCodeFactory.WebHost
 {
@@ -37,7 +38,7 @@ namespace PromoCodeFactory.WebHost
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
           
 
-            services.AddScoped<IRepository<Preference>, PreferenceRepositoriy>();
+            services.AddScoped<IPreferenceRepositoriy, PreferenceRepositoriy>();
             services.AddScoped<IRepository<Role>, RoleRepositoriy>();
             services.AddScoped<IRepository<Customer>, CustomerRepository>();
             services.AddScoped<IRepository<Employee>, EmployeeRepositoriy>();

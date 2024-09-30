@@ -107,7 +107,12 @@ namespace PromoCodeFactory.WebHost.Controllers
         [HttpPut("{customerId}")]
         public async Task<IActionResult> EditCustomersAsync(Guid customerId, CreateOrEditCustomerRequest request, CancellationToken cancellationToken)
         {
-            var customer = new Customer()
+            var customer = await _customersRepository.GetByIdAsync(customerId, cancellationToken);
+
+            if (customer == null)
+                return NotFound();
+
+            customer = new Customer()
             {
                 Id = customerId,
                 FirstName = request.FirstName,
@@ -134,6 +139,11 @@ namespace PromoCodeFactory.WebHost.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteCustomer(Guid id, CancellationToken cancellationToken)
         {
+            var customer = await _customersRepository.GetByIdAsync(id,cancellationToken);
+
+            if (customer == null)
+                return NotFound();
+
             await _customersRepository.DeleteAsync(id, cancellationToken);
             return Ok();
         }
