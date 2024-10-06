@@ -219,10 +219,10 @@ namespace PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
             // Act
             await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, request);
-            var result = await _partnersRepositoryMock.Object.GetByIdAsync(It.IsAny<Guid>());
+
 
             // Assert
-            result.PartnerLimits.FirstOrDefault(x => !x.CancelDate.HasValue).Should().NotBeNull();
+            _partnersRepositoryMock.Verify(partners => partners.UpdateAsync(partner), Times.Once());
         }
     }
 }
