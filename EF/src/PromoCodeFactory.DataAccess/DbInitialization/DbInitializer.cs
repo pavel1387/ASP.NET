@@ -21,21 +21,17 @@ namespace PromoCodeFactory.DataAccess.DbInitialization
         {
             _dbContext.Database.Migrate();
 
-            var tables = _dbContext.Model.GetEntityTypes()
-                        .Select(t => t.GetTableName())
-                        .ToList();
-
-            if (!tables.Contains("Employees"))
+            if (_dbContext.Employees.Count() == 0)
             {
                 _dbContext.AddRange(FakeDataFactory.Employees);
                 _dbContext.SaveChanges();
             }
-            if (!tables.Contains("Preferences"))
+            if (_dbContext.Preferences.Count() == 0)
             {
                 _dbContext.AddRange(FakeDataFactory.Preferences);
                 _dbContext.SaveChanges();
             }
-            if (!tables.Contains("Customers"))
+            if (_dbContext.Customers.Count() ==0)
             {
                 _dbContext.AddRange(FakeDataFactory.Customers);
                 _dbContext.SaveChanges();
