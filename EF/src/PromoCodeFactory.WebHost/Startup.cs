@@ -30,8 +30,9 @@ namespace PromoCodeFactory.WebHost
         {
             services.AddControllers();
 
-            services.AddDbContext<DataContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(
+                options => options.UseNpgsql(
+                    Configuration.GetConnectionString("PostgresConnection")));
 
             services.AddScoped<DbInitializer>();
 
