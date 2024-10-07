@@ -86,8 +86,8 @@ namespace PromoCodeFactory.WebHost.Controllers
             {
                 PromoCode promoCode = new PromoCode
                 {
-                    BeginDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddDays(7),
+                    BeginDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow.AddDays(7),
                     Code = request.PromoCode,
                     CustomerId = customer.Id,
                     PartnerName = request.PartnerName,
