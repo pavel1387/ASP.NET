@@ -19,16 +19,23 @@ namespace PromoCodeFactory.DataAccess.DbInitialization
 
         public void Initialize()
         {
-            _dbContext.Database.EnsureDeleted();
-          
             _dbContext.Database.Migrate();
 
-            _dbContext.AddRange(FakeDataFactory.Employees);
-            _dbContext.AddRange(FakeDataFactory.Preferences);
-            _dbContext.AddRange(FakeDataFactory.Customers);
-
-            _dbContext.SaveChanges();
-
+            if (_dbContext.Employees.Count() == 0)
+            {
+                _dbContext.AddRange(FakeDataFactory.Employees);
+                _dbContext.SaveChanges();
+            }
+            if (_dbContext.Preferences.Count() == 0)
+            {
+                _dbContext.AddRange(FakeDataFactory.Preferences);
+                _dbContext.SaveChanges();
+            }
+            if (_dbContext.Customers.Count() ==0)
+            {
+                _dbContext.AddRange(FakeDataFactory.Customers);
+                _dbContext.SaveChanges();
+            }
         }
     }
 }
