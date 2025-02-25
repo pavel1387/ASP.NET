@@ -63,3 +63,30 @@ services:
       - "ConnectionStrings:PromocodeFactoryGivingToCustomerDb=Host=promocode-factory-giving-to-customer-db;Database=promocode_factory_giving_to_customer_db;Username=postgres;Password=docker"          
     depends_on: 
       - promocode-factory-giving-to-customer-db
+  #Preferences Api
+  preferences-api:
+    container_name: 'promocode-factory-preferences-api'
+    build: src/Pcf.Preferences/
+    restart: always
+    ports:
+      - "8094:8080"
+    environment:
+      - "ConnectionStrings:PromocodeFactoryPreferencesDb=Host=promocode-factory-preferences-db;Database=promocode_factory_preferences_db;Username=postgres;Password=docker"          
+    depends_on: 
+      - preferences-db
+      - redis
+  #Preferences Db
+  preferences-db:
+    image: "postgres:latest"
+    container_name: 'promocode-factory-preferences-db'
+    restart: always 
+    ports:
+      - 5436:5432
+    environment: 
+      - POSTGRES_PASSWORD=docker
+  #Preferences Cache
+  redis:
+    image: redis:latest
+    container_name: promocode-factory-preferences-redis
+    ports:
+      - "6379:6379"
