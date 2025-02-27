@@ -4,7 +4,7 @@ using Pcf.Preferences.WebHost.Models;
 
 namespace Pcf.Preferences.WebHost.Controllers;
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class PreferencesController : ControllerBase
 {
     private readonly ILogger<PreferencesController> _logger;

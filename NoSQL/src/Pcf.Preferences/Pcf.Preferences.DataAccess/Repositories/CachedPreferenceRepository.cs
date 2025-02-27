@@ -8,7 +8,7 @@ public class CachedPreferenceRepository : IPreferenceRepository
 {
     private readonly IDistributedCache _cache;
     private readonly IPreferenceRepository _preferenceRepository;
-    private const string CacheKey = "preferences"; 
+    private const string CacheKey = "preferences";
 
     public CachedPreferenceRepository(IDistributedCache cache, IPreferenceRepository preferenceRepository)
     {
@@ -20,15 +20,13 @@ public class CachedPreferenceRepository : IPreferenceRepository
     {
         var cachedData = await _cache.GetStringAsync(CacheKey);
         if (!string.IsNullOrEmpty(cachedData))
-        {
             return JsonSerializer.Deserialize<List<Preference>>(cachedData);
-        }
 
         var preferences = await _preferenceRepository.GetAllAsync();
 
         var cacheOptions = new DistributedCacheEntryOptions
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(10)
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60)
         };
         await _cache.SetStringAsync(CacheKey, JsonSerializer.Serialize(preferences), cacheOptions);
 
