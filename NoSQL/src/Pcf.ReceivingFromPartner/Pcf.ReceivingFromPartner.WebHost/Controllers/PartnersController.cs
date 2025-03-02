@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
  using Pcf.ReceivingFromPartner.Core.Abstractions.Repositories;
  using Pcf.ReceivingFromPartner.Core.Domain;
  using Pcf.ReceivingFromPartner.WebHost.Mappers;
+using Pcf.ReceivingFromPartner.Integration;
 
  namespace Pcf.ReceivingFromPartner.WebHost.Controllers
 {
@@ -20,19 +21,19 @@ using Microsoft.AspNetCore.Mvc;
         : ControllerBase
     {
         private readonly IRepository<Partner> _partnersRepository;
-        private readonly IRepository<Preference> _preferencesRepository;
+        private readonly IPreferencesGateway _preferencesGateway;
         private readonly INotificationGateway _notificationGateway;
         private readonly IGivingPromoCodeToCustomerGateway _givingPromoCodeToCustomerGateway;
         private readonly IAdministrationGateway _administrationGateway;
 
         public PartnersController(IRepository<Partner> partnersRepository,
-            IRepository<Preference> preferencesRepository, 
+            IPreferencesGateway preferencesGateway, 
             INotificationGateway notificationGateway,
             IGivingPromoCodeToCustomerGateway givingPromoCodeToCustomerGateway,
             IAdministrationGateway administrationGateway)
         {
             _partnersRepository = partnersRepository;
-            _preferencesRepository = preferencesRepository;
+            _preferencesGateway = preferencesGateway;
             _notificationGateway = notificationGateway;
             _givingPromoCodeToCustomerGateway = givingPromoCodeToCustomerGateway;
             _administrationGateway = administrationGateway;
@@ -317,7 +318,7 @@ using Microsoft.AspNetCore.Mvc;
             }
 
             //Получаем предпочтение по имени
-            var preference = await _preferencesRepository.GetByIdAsync(request.PreferenceId);
+            var preference = await _preferencesGateway.GetByIdAsync(request.PreferenceId);
 
             if (preference == null)
             {
