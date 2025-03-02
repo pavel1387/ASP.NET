@@ -75,6 +75,7 @@ namespace Pcf.GivingToCustomer.WebHost.Controllers
 
             PromoCode promoCode = PromoCodeMapper.MapFromModel(request, preference, customers);
 
+            promoCode.Preference = null;
             await _promoCodesRepository.AddAsync(promoCode);
 
             return CreatedAtAction(nameof(GetPromocodesAsync), new { }, null);
