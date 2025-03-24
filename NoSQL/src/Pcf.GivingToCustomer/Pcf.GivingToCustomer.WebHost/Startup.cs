@@ -51,6 +51,11 @@ namespace Pcf.GivingToCustomer.WebHost
                 options.Title = "PromoCode Factory Giving To Customer API Doc";
                 options.Version = "1.0";
             });
+
+            services.AddHttpClient<IPreferencesGateway, PreferencesGateway>(c =>
+            {
+                c.BaseAddress = new Uri(Configuration["IntegrationSettings:PreferencesApiUrl"]);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

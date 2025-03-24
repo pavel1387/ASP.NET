@@ -1,4 +1,9 @@
-
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Pcf.Preferences.Core.Abstractions;
+using Pcf.Preferences.DataAccess;
+using Pcf.Preferences.DataAccess.Data;
+using Pcf.Preferences.DataAccess.Repositories;
 namespace Pcf.Preferences.WebHost;
 
 public class Program
@@ -14,9 +19,23 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddScoped<PreferenceRepository>();
+        builder.Services.AddScoped<IPreferenceRepository>(sp =>
+            new CachedPreferenceRepository(
+                sp.GetRequiredService<IDistributedCache>(),
+                sp.GetRequiredService<PreferenceRepository>()
+            )
+        );
+
+        builder.Services.AddScoped<IDbInitializer, EfDbInitializer>();
+        builder.Services.AddDbContext<DataContext>(options =>
+        {
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PromocodeFactoryPreferencesDb"));
+        });
+
         builder.Services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = "redis:6379"; 
+            options.Configuration = builder.Configuration.GetConnectionString("PromocodeFactoryPreferencesRedis");
             options.InstanceName = "PreferenceCache";
         });
 
@@ -33,6 +52,12 @@ public class Program
 
 
         app.MapControllers();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+            dbInitializer.InitializeDb();
+        }
 
         app.Run();
     }

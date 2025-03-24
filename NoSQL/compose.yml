@@ -38,8 +38,9 @@ services:
       - "8092:8080"
     environment:
       - "ConnectionStrings:PromocodeFactoryReceivingFromPartnerDb=Host=promocode-factory-receiving-from-partner-db;Database=promocode_factory_receiving_from_partner_db;Username=postgres;Password=docker"
-      - "IntegrationSettings:GivingToCustomerApiUrl=http://promocode-factory-giving-to-customer-api"    
-      - "IntegrationSettings:AdministrationApiUrl=http://promocode-factory-administration-api"       
+      - "IntegrationSettings:GivingToCustomerApiUrl=http://promocode-factory-giving-to-customer-api:8080"    
+      - "IntegrationSettings:AdministrationApiUrl=http://promocode-factory-administration-api:8080"
+      - "IntegrationSettings:PreferencesApiUrl=http://promocode-factory-preferences-api:8080" 
     depends_on: 
       - promocode-factory-receiving-from-partner-db
   
@@ -60,23 +61,26 @@ services:
     ports:
       - "8093:8080"
     environment:
-      - "ConnectionStrings:PromocodeFactoryGivingToCustomerDb=Host=promocode-factory-giving-to-customer-db;Database=promocode_factory_giving_to_customer_db;Username=postgres;Password=docker"          
+      - "ConnectionStrings:PromocodeFactoryGivingToCustomerDb=Host=promocode-factory-giving-to-customer-db;Database=promocode_factory_giving_to_customer_db;Username=postgres;Password=docker" 
+      - "IntegrationSettings:PreferencesApiUrl=http://promocode-factory-preferences-api:8080"
     depends_on: 
       - promocode-factory-giving-to-customer-db
   #Preferences Api
-  preferences-api:
+  promocode-factory-preferences-api:
     container_name: 'promocode-factory-preferences-api'
     build: src/Pcf.Preferences/
     restart: always
     ports:
       - "8094:8080"
     environment:
-      - "ConnectionStrings:PromocodeFactoryPreferencesDb=Host=promocode-factory-preferences-db;Database=promocode_factory_preferences_db;Username=postgres;Password=docker"          
+      - "ConnectionStrings:PromocodeFactoryPreferencesDb=Host=promocode-factory-preferences-db;Database=promocode_factory_preferences_db;Username=postgres;Password=docker"
+      - "ConnectionStrings:PromocodeFactoryPreferencesRedis=promocode-factory-preferences-redis:6379"
+      -  ASPNETCORE_ENVIRONMENT=Development
     depends_on: 
-      - preferences-db
-      - redis
+      - promocode-factory-preferences-db
+      - promocode-factory-preferences-redis
   #Preferences Db
-  preferences-db:
+  promocode-factory-preferences-db:
     image: "postgres:latest"
     container_name: 'promocode-factory-preferences-db'
     restart: always 
@@ -85,8 +89,9 @@ services:
     environment: 
       - POSTGRES_PASSWORD=docker
   #Preferences Cache
-  redis:
+  promocode-factory-preferences-redis:
     image: redis:latest
     container_name: promocode-factory-preferences-redis
+    restart: always 
     ports:
       - "6379:6379"

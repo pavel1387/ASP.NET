@@ -19,4 +19,17 @@ public class PreferenceRepository : IPreferenceRepository
 
         return entities;
     }
+
+    public async Task<Preference> GetByIdAsync(Guid id)
+    {
+        var entity = await _dataContext.Set<Preference>().FirstOrDefaultAsync(x => x.Id == id);
+
+        return entity;
+    }
+
+    public async Task<IEnumerable<Preference>> GetRangeByIdsAsync(List<Guid> ids)
+    {
+        var entities = await _dataContext.Set<Preference>().Where(x => ids.Contains(x.Id)).ToListAsync();
+        return entities;
+    }
 }
