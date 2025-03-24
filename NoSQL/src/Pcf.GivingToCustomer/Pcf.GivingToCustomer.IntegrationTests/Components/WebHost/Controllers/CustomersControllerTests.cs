@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Pcf.GivingToCustomer.Core.Domain;
 using Pcf.GivingToCustomer.DataAccess.Repositories;
+using Pcf.GivingToCustomer.Integration;
 using Pcf.GivingToCustomer.WebHost.Controllers;
 using Pcf.GivingToCustomer.WebHost.Models;
 using Xunit;
@@ -16,16 +18,18 @@ namespace Pcf.GivingToCustomer.IntegrationTests.Components.WebHost.Controllers
     {
         private readonly CustomersController _customersController;
         private readonly EfRepository<Customer> _customerRepository;
-        private readonly EfRepository<Preference> _preferenceRepository;
+        private readonly PreferencesGateway _preferencesGateway;
         
         public CustomersControllerTests(EfDatabaseFixture efDatabaseFixture)
         {
             _customerRepository = new EfRepository<Customer>(efDatabaseFixture.DbContext);
-            _preferenceRepository = new EfRepository<Preference>(efDatabaseFixture.DbContext);
-            
+
+            var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:8098") };
+            _preferencesGateway = new PreferencesGateway(httpClient);
+
             _customersController = new CustomersController(
-                _customerRepository, 
-                _preferenceRepository);
+                _customerRepository,
+                _preferencesGateway);
         }
         
         [Fact]
